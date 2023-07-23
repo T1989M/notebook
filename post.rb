@@ -1,8 +1,16 @@
 class Post
 
+def self.post_types
+  [Memo, Link, Task]
+end
+
+def self.create(type_index)
+  post_types[type_index].new 
+end
+
 def initialize
   @created_at = Time.now 
-  @text = nil 
+  @text = []
 end
 
 def read_from_console
@@ -14,19 +22,18 @@ def to_strings
 end
 
 def save
-  file = File.new(file_path)
+  file = File.new(file_path, 'w:UTF-8')
 
-  for item in to_strings  do 
-    file.puts(item)
+   to_strings.each { |string| file.puts(string) }
+
+    file.close
   end
 
-  file.close
-end
  def file_path
   current_path = File.dirname(__FILE__)
 
-  file_name = @created_at.strftime("#{salf.class.name}_%Y-%m-%d_%H-%M-%S.txt")
+  file_name = @created_at.strftime('%Y-%m-%d_%H-%M-%S')
 
-  return current_path + "/" + file_name
+   "#{current_path}/#{self.class.name}_#{file_name}.txt"
  end 
 end
